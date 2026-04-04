@@ -81,9 +81,9 @@ RPi側はATmega328との通信を担うサーバーを実装。 \
 
 下記、それぞれインストール
 
-[https://github.com/arduino/arduino-cli](https://github.com/arduino/arduino-cli)
-[https://github.com/arduino/arduino-language-server](https://github.com/arduino/arduino-language-server)
-[https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#arduino_language_server](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#arduino_language_server)
+[https://github.com/arduino/arduino-cli](https://github.com/arduino/arduino-cli) \
+[https://github.com/arduino/arduino-language-server](https://github.com/arduino/arduino-language-server) \
+[https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#arduino_language_server](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#arduino_language_server) 
 
 #### arduino-cli
 
