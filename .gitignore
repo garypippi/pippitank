@@ -1,4 +1,6 @@
-.cache
-.spec
-pippitankd
-pippitank-cli
+/.cache
+/.spec
+/pippitankd
+/pippitank-cli
+/pippitankd-host
+/pippitank-cli-host
