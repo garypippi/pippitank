@@ -13,7 +13,9 @@
 #define BASE_POLL_FDS 2
 #define BUFFER_SIZE   128
 #define BAUDRATE      B9600
-#define IDLE_PULSE    1500
+#define PWM_MIN       1000
+#define PWM_MAX       2000
+#define PWM_IDLE      1500
 
 int main(int argc, char *argv[])
 {
@@ -175,30 +177,50 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    int cmd_value, ret;
+                    int cmd_value, pwm_value, ret;
                     char cmd_type;
+                    char cmd_str[BUFFER_SIZE] = "";
 
                     buffer[n] = '\0';
-
-                    // Only one command is currently supported: "F [SPEED]".
                     ret = sscanf(buffer, "%c %d", &cmd_type, &cmd_value);
 
-                    // Move forward at the given speed.
-                    if (ret == 2 && cmd_type == 'F')
+                    if (ret != 2)
                     {
-                        char cmd_str[BUFFER_SIZE];
-                        sprintf(cmd_str, "L%d", IDLE_PULSE + cmd_value);
+                        continue;
+                    }
 
-                        if (no_serial != 1)
-                        {
-                            write(serial_port, cmd_str, strlen(cmd_str));
-                            write(serial_port, "\n", 1);
-                            printf("[INFO] Command sent: %s\n", cmd_str);
-                        }
-                        else
-                        {
-                            printf("[INFO] Command skipped: %s\n", cmd_str);
-                        }
+                    switch (cmd_type)
+                    {
+                        case 'F':
+                            if (cmd_value >= 0 && cmd_value <= 100)
+                            {
+                                pwm_value = PWM_IDLE + (PWM_MAX - PWM_IDLE) * cmd_value / 100;
+                                sprintf(cmd_str, "L%d",  pwm_value);
+                            }
+                            break;
+                        case 'B':
+                            if (cmd_value >= 0 && cmd_value <= 100)
+                            {
+                                pwm_value = PWM_IDLE - (PWM_IDLE - PWM_MIN) * cmd_value / 100;
+                                sprintf(cmd_str, "L%d",  pwm_value);
+                            }
+                            break;
+                    }
+
+                    if (cmd_str[0] == '\0')
+                    {
+                        continue;
+                    }
+
+                    if (no_serial != 1)
+                    {
+                        write(serial_port, cmd_str, strlen(cmd_str));
+                        write(serial_port, "\n", 1);
+                        printf("[INFO] Command sent: %s\n", cmd_str);
+                    }
+                    else
+                    {
+                        printf("[INFO] Command skipped: %s\n", cmd_str);
                     }
                 }
             }
