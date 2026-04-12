@@ -7,6 +7,8 @@
 
 #define BUFFER_SIZE 128
 
+// A simple pippitankd client.
+// Sends whatever you type, except "q" which quits the program.
 int main(int argc, char *argv[])
 {
     int server_fd;
@@ -34,17 +36,20 @@ int main(int argc, char *argv[])
         printf("> ");
         fflush(stdout);
 
-        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+        {
             break;
         }
 
         buffer[strcspn(buffer, "\n")] = '\0';
 
-        if (strlen(buffer) == 0) {
+        if (strlen(buffer) == 0)
+        {
             continue;
         }
 
-        if (strcmp(buffer, "q") == 0) {
+        if (strcmp(buffer, "q") == 0)
+        {
             break;
         }
 

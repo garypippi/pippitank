@@ -27,7 +27,9 @@ void loop()
     if (c == 'L')
     {
       int pulseLeft = pippiSerial.parseInt();
-      if (pulseLeft <= PWM_MAX && pulseLeft >= PWM_MIN) {
+
+      if (pulseLeft <= PWM_MAX && pulseLeft >= PWM_MIN)
+      {
         pippiServoLeft.writeMicroseconds(pulseLeft);
         pippiSerial.print("A");
       }
