@@ -55,8 +55,8 @@
 	)
 	(attr smd)
 	(fp_rect
-		(start -3.05 -1.66)
-		(end 3.05 1.3)
+		(start -3.5 -1.66)
+		(end 3.5 1.3)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -118,13 +118,13 @@
 		(uuid "2cf84125-5f78-424d-b47c-f2e4ee16bf12")
 	)
 	(pad "4" smd rect
-		(at -2.55 0)
+		(at -3 0)
 		(size 0.9 0.7)
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(uuid "f9a29c19-7ccf-4adf-99f2-c2f667eb848b")
 	)
 	(pad "5" smd rect
-		(at 2.55 0)
+		(at 3 0)
 		(size 0.9 0.7)
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(uuid "75432a2e-ffe7-44af-9193-a2affa418459")
