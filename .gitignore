@@ -1,5 +1,6 @@
 /.cache
 /.spec
+/.programmer
 /pippitankd
 /pippitank-cli
 /pippitankd-host
