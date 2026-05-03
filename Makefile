@@ -1,34 +1,23 @@
-CC_RPI      = arm-linux-gnueabihf-gcc
-CC_HOST     = gcc
-CFLAGS_RPI  = -static
-CFLAGS_HOST = -Wall -Wextra
+CC     ?= arm-linux-gnueabihf-gcc
+CFLAGS ?= -static -Wall -Wextra
 
-.PHONY: all host clean deploy arduino-compile arduino-upload
+BIN = bin
 
-all: pippitankd pippitank-cli
+.PHONY: all clean deploy
 
-host: pippitankd-host pippitank-cli-host
+all: $(BIN)/pippitankd $(BIN)/pippitank-cli
 
 clean:
-	rm -f pippitankd pippitank-cli pippitankd-host pippitank-cli-host
+	rm -rf $(BIN)
 
-deploy: pippitankd pippitank-cli
-	scp pippitankd pippitank-cli pippitank:
+deploy: all
+	scp $(BIN)/pippitankd $(BIN)/pippitank-cli pippitank:
 
-arduino-compile:
-	arduino-cli compile src/arduino/pippitank
+$(BIN)/pippitankd: src/pippitankd/main.c | $(BIN)
+	$(CC) $(CFLAGS) -o $@ $^
 
-arduino-upload:
-	arduino-cli upload src/arduino/pippitank
+$(BIN)/pippitank-cli: src/pippitank-cli/main.c | $(BIN)
+	$(CC) $(CFLAGS) -o $@ $^
 
-pippitankd: src/rpi/pippitankd/main.c
-	$(CC_RPI) $(CFLAGS_RPI) -o $@ $^
-
-pippitank-cli: src/rpi/pippitank-cli/main.c
-	$(CC_RPI) $(CFLAGS_RPI) -o $@ $^
-
-pippitankd-host: src/rpi/pippitankd/main.c
-	$(CC_HOST) $(CFLAGS_HOST) -o $@ $^
-
-pippitank-cli-host: src/rpi/pippitank-cli/main.c
-	$(CC_HOST) $(CFLAGS_HOST) -o $@ $^
+$(BIN):
+	mkdir -p $(BIN)
