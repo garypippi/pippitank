@@ -32,6 +32,14 @@
 
 - ./pcb/pippitank-engine 電源分岐基板
     - REV_A実装済
-    - ファーム作成中
+    - ファーム作成済
 - ./pcb/pippitank-esc-adaptor ESCアダプタ基板
     - 構想段階
+
+## TODO
+
+- シャーシ設計(3DCAD)
+- ギアボックス設計(3DCAD)
+- ファームリファクタ
+- ./pcb/pippitank-esc-adaptor/rev_a 設計
+- ./pcb/pippitank-engine/rev_b 設計

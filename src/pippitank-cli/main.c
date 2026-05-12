@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <getopt.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "../protocol.h"
 
 #define BUFFER_SIZE 128
@@ -11,19 +14,44 @@
 // Sends whatever you type, except "q" which quits the program.
 int main(int argc, char *argv[])
 {
-    int server_fd;
-    struct sockaddr_un sock_addr;
+    int listen_port = 0;
+    char listen_addr[64]  = "";
 
-    if ((server_fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
+    int opt;
+    struct option options[] = {
+        {"listen",    required_argument, NULL, 'L'},
+        {0,           0,                 0,     0 },
+    };
+
+    while ((opt = getopt_long(argc, argv, ":s:L:", options, NULL)) != -1)
+    {
+        switch (opt)
+        {
+            case 'L':
+                sscanf(optarg, "%63[^:]:%d", listen_addr, &listen_port);
+                break;
+            case ':':
+                fprintf(stderr, "Option -%c requires argument.\n", optopt);
+                return -1;
+            case '?':
+                fprintf(stderr, "Unknown option: -%c\n", optopt);
+                return -1;
+        }
+    }
+    int server_fd;
+    struct sockaddr_in sock_addr;
+
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
         perror("ERROR: socket()");
         return -1;
     }
 
-    sock_addr.sun_family = AF_UNIX;
-    strcpy(sock_addr.sun_path, PIPPITANKD_SOCK_PATH);
+    sock_addr.sin_family      = AF_INET;
+    sock_addr.sin_addr.s_addr = inet_addr(listen_addr);
+    sock_addr.sin_port        = htons(listen_port);
 
-    if (connect(server_fd, (struct sockaddr*)&sock_addr, sizeof(struct sockaddr_un)) == -1)
+    if (connect(server_fd, (struct sockaddr*)&sock_addr, sizeof(struct sockaddr_in)) == -1)
     {
         perror("ERROR: connect()");
         return -1;
@@ -54,6 +82,7 @@ int main(int argc, char *argv[])
         }
 
         write(server_fd, buffer, strlen(buffer));
+        write(server_fd, "\n", 1);
     }
 
     printf("Bye...");

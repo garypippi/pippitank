@@ -9,6 +9,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
 
+option(BUILD_UI "Build pippitank-ui (requires OpenCV, dev host only)" ON)
+
 add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
 include(FetchContent)
@@ -26,5 +28,11 @@ FetchContent_MakeAvailable(tl-expected)
 enable_testing()
 
 add_subdirectory(src/pippitank-protocol)
+add_subdirectory(src/pippitank-io)
+add_subdirectory(src/pippitank-telemetry)
 add_subdirectory(src/pippitank-emulator)
+add_subdirectory(src/pippitankd)
+if(BUILD_UI)
+    add_subdirectory(src/pippitank-ui)
+endif()
 add_subdirectory(tests)

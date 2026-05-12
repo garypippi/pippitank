@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <string_view>
 #include "pippitank-protocol.hpp"
+#include "fd.hpp"
 
 namespace {
 
@@ -24,31 +25,6 @@ ptank::EnginePayload build_payload(std::uint32_t tick) noexcept {
     p.adc_temp     = static_cast<std::uint16_t>(tick + 60);
     return p;
 }
-
-class Fd {
-public:
-    Fd() noexcept = default;
-    explicit Fd(int fd) noexcept : fd_(fd) {}
-    ~Fd() { if (fd_ >= 0) ::close(fd_); }
-
-    Fd(const Fd&) = delete;
-    Fd& operator=(const Fd&) = delete;
-    Fd(Fd&& o) noexcept : fd_(o.fd_) {o.fd_ = -1; }
-    Fd& operator=(Fd&& o) noexcept {
-        if (this != &o) {
-            if (fd_ >= 0) ::close(fd_);
-            fd_ = o.fd_;
-            o.fd_ = -1;
-        }
-        return *this;
-    }
-
-    int get() const noexcept { return fd_; }
-    bool valid() const noexcept { return fd_ >= 0; }
-
-private:
-    int fd_ = -1;
-};
 
 }
 
@@ -77,7 +53,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    const Fd pty(::open(argv[1], O_RDWR | O_NOCTTY));
+    const ptank::Fd pty(::open(argv[1], O_RDWR | O_NOCTTY));
 
     if (!pty.valid()) {
         std::cerr << "open failed: " << strerror(errno) << "\n";

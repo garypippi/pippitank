@@ -1,0 +1,12 @@
+profiles:
+  default:
+    fqbn: megaTinyCore:megaavr:atxy4:chip=1604,clock=20internal
+    programmer: jtag2updi
+    port: /dev/ttyACM0
+    platforms:
+      - platform: megaTinyCore:megaavr (2.6.11)
+        platform_index_url: http://drazzy.com/package_drazzy.com_index.json
+
+default_profile: default
+default_programmer: jtag2updi
+default_port: /dev/ttyACM0
