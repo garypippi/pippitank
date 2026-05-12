@@ -2,3 +2,5 @@
 /.spec
 /.programmer
 /bin
+/build
+/compile_commands.json
