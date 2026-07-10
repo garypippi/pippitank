@@ -1,1 +1,4 @@
 pippitank.bak
+fp-info-cache
+*.kicad_prl
+*.lck
